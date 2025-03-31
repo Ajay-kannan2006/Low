@@ -36,8 +36,9 @@ const register = async (req, res) => {
 
         const token = generateToken(newUser._id);
         res.cookie('jwt', token, {
-            httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-            secure: false, // Set to true in production (HTTPS only)
+           httpOnly: true, // Prevent access from JavaScript (security best practice)
+    secure: true, // Only send cookies over HTTPS
+    sameSite: 'none',
             maxAge: 1000 * 60 * 60 * 24,
         });
 
@@ -83,7 +84,10 @@ const login = async (req, res) => {
 
         const token = generateToken(userdata._id);
         res.cookie('jwt', token, {
-            httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+            httpOnly: true,
+            // Prevents client-side  from accessing the cookie
+            secure: true, // Only send cookies over HTTPS
+    sameSite: 'none',
             maxAge: 1000 * 60 * 60 * 24,
         });
         res.status(200).json({ message: "Login successful" });
