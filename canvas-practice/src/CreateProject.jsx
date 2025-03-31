@@ -14,7 +14,7 @@ const CreateProject = () => {
         return;
       }
       const res = await axios.post(
-        "http://localhost:8080/api/project/create-project",
+        "https://low-0msq.onrender.com/api/project/create-project",
         {
           title: title,
         },

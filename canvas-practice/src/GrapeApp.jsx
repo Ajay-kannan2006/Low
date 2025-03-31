@@ -9,7 +9,9 @@ import { addToolbarButton } from "./saveToComponentsList";
 import Cookies from "js-cookie";
 import html2canvas from 'html2canvas';
 import { useLocation } from "react-router-dom";
-
+import { renderToString } from "react-dom/server"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faParagraph } from "@fortawesome/free-solid-svg-icons";
 // this are properties
 import { addHeaderTagProperty, addButtonProperty, addInputProperty, addLabelProperty, addAnchorTagProperty, addCheckBoxProperty, addRadioProperty, addTextAreaProperty, addSelectProperty, addImageProperty, addTableProperty, addTableRowProperty, addUlProperty, addOlProperty, addDlProperty } from "./properties"
 
@@ -25,7 +27,7 @@ function GrapeApp() {
   const location = useLocation();
   const projectDetails = location.state;
   const projectID = projectDetails["_id"];
-  const projectEndpoint = `http://localhost:8080/api/project/save-project/${projectID}`;
+  const projectEndpoint = `https://low-0msq.onrender.com/api/project/save-project/${projectID}`;
 
   useEffect(() => {
     const editor = grapesjs.init({

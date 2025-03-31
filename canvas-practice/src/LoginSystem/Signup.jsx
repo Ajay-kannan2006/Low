@@ -16,7 +16,10 @@ const Signup = () => {
     useEffect(() => {
         const checkUser = async () => {
             try {
-                const res = await axios.get('http://localhost:8080/api/auth/check-user', { withCredentials: true });
+                const res = await axios.get(
+                  "https://low-0msq.onrender.com/api/auth/check-user",
+                  { withCredentials: true }
+                );
                 console.log(res);
 
                 if (res.data.logged) {
@@ -77,11 +80,15 @@ const Signup = () => {
         setErrorMessage("");
 
         try {
-            const res = await axios.post("http://localhost:8080/api/auth/register", {
+            const res = await axios.post(
+              "https://low-0msq.onrender.com/api/auth/register",
+              {
                 username,
                 email,
-                password
-            }, { withCredentials: true });
+                password,
+              },
+              { withCredentials: true }
+            );
 
             console.log("Registration successful", res.data);
             navigate('/home');

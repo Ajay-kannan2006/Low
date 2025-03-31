@@ -14,8 +14,13 @@ const cloudinary = require('cloudinary');
 
 app.use(cookieParser());
 
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true,
+// }));
+
 app.use(cors({
-    origin: 'https://low-two.vercel.app',
+    origin:'https://low-two.vercel.app',
     credentials: true,
 }))
 
@@ -29,7 +34,7 @@ cloudinary.config({
 
 
 //DB connectivity
-mongoose.connect('mongodb://localhost:27017/NoCodeLowCode')
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log("MongoDB is connected"))
     .catch((err) => console.log("it will occuring the error"));
 
