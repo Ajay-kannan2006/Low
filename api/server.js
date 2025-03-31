@@ -15,7 +15,7 @@ const cloudinary = require('cloudinary');
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://low-two.vercel.app',
     credentials: true,
 }))
 
