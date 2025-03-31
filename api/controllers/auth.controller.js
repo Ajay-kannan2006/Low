@@ -7,7 +7,10 @@ require('dotenv').config();
 const maxAge = 7 * 24 * 60 * 60;
 const generateToken = (id) => {
     return jwt.sign({ id }, 'my-token', {
-        expiresIn: maxAge
+        expiresIn: maxAge,
+        httpOnly: true, // Prevent access from JavaScript (security best practice)
+    secure: true, // Only send cookies over HTTPS
+    sameSite: 'none',
     })
 }
 
