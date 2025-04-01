@@ -1,18 +1,16 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const User = require('../models/Register');
 // const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+
 
 const maxAge = 7 * 24 * 60 * 60;
+
 const generateToken = (id) => {
-    return jwt.sign({ id }, 'my-token', {
-        expiresIn: maxAge,
-        httpOnly: true, // Prevent access from JavaScript (security best practice)
-    secure: true, // Only send cookies over HTTPS
-    sameSite: 'none',
-    })
-}
+    return jwt.sign({ id },'my-token', { expiresIn: maxAge });
+};
+
 
 
 const register = async (req, res) => {
@@ -38,7 +36,7 @@ const register = async (req, res) => {
         res.cookie('jwt', token, {
            httpOnly: true, // Prevent access from JavaScript (security best practice)
     secure: true, // Only send cookies over HTTPS
-    sameSite: 'none',
+    sameSite: 'lax',
             maxAge: 1000 * 60 * 60 * 24,
         });
 
