@@ -45,7 +45,7 @@ const Card = ({ item }) => {
   const toggleFavourite = async () => {
     try {
       const res = await axios.patch(
-        `https://low-0msq.onrender.com///api/project/update-favourite/${item._id}`,
+        `https://low-0msq.onrender.com/api/project/update-favourite/${item._id}`,
         {
           isFavourite: !favourite,
         }
