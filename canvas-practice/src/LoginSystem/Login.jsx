@@ -11,7 +11,10 @@ const Login = () => {
     useEffect(() => {
         const checkUser = async () => {
             try {
-                const res = await axios.get('https://low-0msq.onrender.com/api/auth/check-user', { withCredentials: true });
+                const res = await axios.get(
+                  "http://localhost:8080/api/auth/check-user",
+                  { withCredentials: true }
+                );
                 console.log(res);
 
                 if (res.data.logged) {
@@ -62,7 +65,7 @@ const Login = () => {
 
         try {
             const res = await axios.post(
-              "https://low-0msq.onrender.com/api/auth/login",
+              "http://localhost:8080/api/auth/login",
               {
                 username,
                 password,

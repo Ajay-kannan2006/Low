@@ -49,7 +49,7 @@ const Favourites = () => {
 
      try {
        const res = await axios.get(
-         "https://low-0msq.onrender.com/api/project/all-projects",
+         "http://localhost:8080/api/project/all-projects",
          { withCredentials: true }
        );
        console.log(res);

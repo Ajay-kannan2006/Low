@@ -27,7 +27,7 @@ function GrapeApp() {
   const location = useLocation();
   const projectDetails = location.state;
   const projectID = projectDetails["_id"];
-  const projectEndpoint = `https://low-0msq.onrender.com/api/project/save-project/${projectID}`;
+  const projectEndpoint = `http://localhost:8080/api/project/save-project/${projectID}`;
 
   useEffect(() => {
     const editor = grapesjs.init({
