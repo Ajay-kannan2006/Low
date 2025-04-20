@@ -34,7 +34,7 @@ const Card = ({ item }) => {
     const value = prompt("Type 'DELETE' to delete the project");
     if (value == "DELETE") {
       const res = await axios.delete(
-        `http://localhost:8080/api/project/delete-project/${item._id}`,
+        `https://low-0msq.onrender.com/api/project/delete-project/${item._id}`,
         { withCredentials: true }
       );
       console.log(res);
@@ -45,7 +45,7 @@ const Card = ({ item }) => {
   const toggleFavourite = async () => {
     try {
       const res = await axios.patch(
-        `http://localhost:8080/api/project/update-favourite/${item._id}`,
+        `https://low-0msq.onrender.com/api/project/update-favourite/${item._id}`,
         {
           isFavourite: !favourite,
         }

@@ -7,7 +7,7 @@ const NavBar = () => {
   const logout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/logout",
+        "https://low-0msq.onrender.com/api/auth/logout",
         {},
         { withCredentials: true }
       );

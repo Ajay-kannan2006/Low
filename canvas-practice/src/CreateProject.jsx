@@ -14,7 +14,7 @@ const CreateProject = () => {
         return;
       }
       const res = await axios.post(
-        "http://localhost:8080/api/project/create-project",
+        "https://low-0msq.onrender.com/api/project/create-project",
         {
           title: title,
         },
@@ -22,7 +22,7 @@ const CreateProject = () => {
       );
       console.log(res);
 
-        navigate("/project", { state: res.data.projectDoc });
+      navigate("/project", { state: res.data.projectDoc });
     } catch (err) {
       setError("Something went wrong try Again");
     }
