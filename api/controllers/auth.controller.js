@@ -48,7 +48,7 @@ const register = async (req, res) => {
         res.cookie('jwt', token, {
            httpOnly: true, // Prevent access from JavaScript (security best practice)
     secure: true, // Only send cookies over HTTPS
-    sameSite: 'lax',
+    sameSite: 'None',
             maxAge: 1000 * 60 * 60 * 24,
         });
 
@@ -96,7 +96,7 @@ const login = async (req, res) => {
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: true,
-    sameSite: 'lax',
+    sameSite: 'None',
             maxAge: 1000 * 60 * 60 * 24,
         });
         res.status(200).json({ message: "Login successful" });
