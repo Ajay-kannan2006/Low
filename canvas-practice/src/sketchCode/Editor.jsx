@@ -33,9 +33,11 @@ const Editor = ({
     setShowCodeWindow(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/generate-code", {
-        image: dataUrl,
-      });
+      const response = await axios.post("https://low-2.onrender.com/generate-code",
+        {
+          image: dataUrl,
+        }
+      );
 
       setGeneratedCode(response.data.component);
       console.log(generatedCode);
