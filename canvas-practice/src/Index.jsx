@@ -14,6 +14,7 @@ import Favourites from "./Components/FeaturesComponents/Favourites";
 import AllProjects from "./Components/FeaturesComponents/AllProjects";
 import CreateProject from "./CreateProject";
 import GrapeApp from "./GrapeApp";
+import Index1 from "./sketchCode/Index1";
 
 const MainLayout = ({ children }) => (
   <>
@@ -96,6 +97,7 @@ const Index = () => {
         />
         <Route path="/create-project" element={<CreateProject />} />
         <Route path="/project" element={<GrapeApp />} />
+        <Route path="/canvas" element={<Index1 />} />
       </Routes>
     </>
   );

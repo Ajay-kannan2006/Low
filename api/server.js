@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoute)
 app.use('/api/project', projectRoute);
-
+// server.js
 
 app.listen(PORT, () => {
     console.log(`The port is running on ${PORT}`);

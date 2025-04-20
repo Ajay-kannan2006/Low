@@ -12,6 +12,18 @@ const generateToken = (id) => {
 };
 
 
+const logout= (req, res) => {
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/'
+  });
+  
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+
 
 const register = async (req, res) => {
     try {
@@ -106,4 +118,4 @@ const checkAlreadyLoggedIn = async (req, res) => {
 }
 
 
-module.exports = { login, register, checkAlreadyLoggedIn };
+module.exports = { login, register, checkAlreadyLoggedIn,logout };
