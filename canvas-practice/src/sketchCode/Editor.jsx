@@ -15,6 +15,8 @@ const Editor = ({
   addLine,
   addCircle,
   addStar,
+  handleEraser,
+  handleBrushWidthChange,
 }) => {
   const navigate = useNavigate();
   const [imageDataUrl, setImageDataUrl] = useState(null);
@@ -33,7 +35,8 @@ const Editor = ({
     setShowCodeWindow(true);
 
     try {
-      const response = await axios.post("https://low-2.onrender.com/generate-code",
+      const response = await axios.post(
+        "https://low-2.onrender.com/generate-code",
         {
           image: dataUrl,
         }
@@ -112,6 +115,8 @@ const Editor = ({
           handlePencil={handlePencil}
           handleCursor={handleCursor}
           handleColorChange={handleColorChange}
+          handleEraser={handleEraser}
+          handleBrushWidthChange={handleBrushWidthChange}
         />
       </div>
 

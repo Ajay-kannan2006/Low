@@ -11,6 +11,7 @@ import {
   ChevronDownIcon,
   SlashIcon,
   StarIcon,
+  EraserIcon, // Add this import for the eraser icon
 } from "sebikostudio-icons";
 import { IconButton } from "@mui/material";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const ToolBar = ({
   addLine,
   addCircle,
   addStar,
+  handleEraser, // Add handleEraser to props
 }) => {
   const [shapesToggle, setShapesToggles] = useState(false);
   const [isColor, isSetColor] = useState(true);
@@ -112,6 +114,9 @@ const ToolBar = ({
       setTool("Text");
     } else if (tool === "Color") {
       setShowColorPicker(!showColorPicker);
+    } else if (tool === "Eraser") {
+      handleEraser(); // Call the handleEraser function
+      setTool("Eraser");
     }
   };
 
@@ -436,6 +441,15 @@ const ToolBar = ({
             onClick={() => handleTools("Pencil")}
             style={tool === "Pencil" ? { backgroundColor: "#0c8ce9" } : {}}
           />
+
+          {/* Add Eraser Icon */}
+          <EraserIcon
+            tabIndex="0"
+            className="text-amber-50 w-9 h-9 text-4xl rounded-[8px] transition-all duration-200 hover:bg-[#383838] hover:rounded-[8px] hover:scale-105 cursor-pointer p-2 focus:bg-[#0c8ce9] focus:outline-none"
+            onClick={() => handleTools("Eraser")}
+            style={tool === "Eraser" ? { backgroundColor: "#0c8ce9" } : {}}
+          />
+
           <TextIcon
             tabIndex="0"
             className="text-amber-50 w-9 h-9 text-4xl rounded-[8px] transition-all duration-200 hover:bg-[#383838] hover:rounded-[8px] hover:scale-105 cursor-pointer p-2 focus:bg-[#0c8ce9] focus:outline-none"

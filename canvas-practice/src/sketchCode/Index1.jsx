@@ -19,8 +19,11 @@ const Index1 = () => {
   const tempRectRef = useRef(null);
   const [drawingShape, setDrawingShape] = useState(null);
   const [brushColor, setBrushColor] = useState("#000000");
-  const [brushWidth, setBrushWidth] = useState(2);
+  const [brushWidth, setBrushWidth] = useState(5);
   const [selectedObject, setSelectedObject] = useState(null);
+
+  const [isBrush, setIsBrush] = useState(false);
+  const [isBrushColor, setIsBrushColor] = useState(false);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -48,31 +51,21 @@ const Index1 = () => {
 
     initCanvas.add(frame);
 
-    // Prevent objects from moving outside the canvas
     initCanvas.on("object:moving", (e) => {
       const obj = e.target;
       const canvasWidth = initCanvas.getWidth();
       const canvasHeight = initCanvas.getHeight();
-
       obj.setCoords();
-
       const boundingRect = obj.getBoundingRect();
 
-      if (boundingRect.left < 0) {
-        obj.left = 0;
-      }
-      if (boundingRect.top < 0) {
-        obj.top = 0;
-      }
-      if (boundingRect.left + boundingRect.width > canvasWidth) {
+      if (boundingRect.left < 0) obj.left = 0;
+      if (boundingRect.top < 0) obj.top = 0;
+      if (boundingRect.left + boundingRect.width > canvasWidth)
         obj.left = canvasWidth - boundingRect.width;
-      }
-      if (boundingRect.top + boundingRect.height > canvasHeight) {
+      if (boundingRect.top + boundingRect.height > canvasHeight)
         obj.top = canvasHeight - boundingRect.height;
-      }
     });
 
-    // Object selection
     initCanvas.on("selection:created", (e) => {
       setSelectedObject(e.selected[0]);
     });
@@ -85,7 +78,6 @@ const Index1 = () => {
       setSelectedObject(null);
     });
 
-    // Handle delete key
     const handleKeyDown = (e) => {
       if (e.key === "Delete") {
         const activeObject = initCanvas.getActiveObject();
@@ -105,6 +97,20 @@ const Index1 = () => {
     };
   }, []);
 
+  // Automatically control UI visibility for brush/color
+  useEffect(() => {
+    if (drawingShape === "Pencil") {
+      setIsBrush(true);
+      setIsBrushColor(true);
+    } else if (drawingShape === "Eraser") {
+      setIsBrush(true);
+      setIsBrushColor(false);
+    } else {
+      setIsBrush(false);
+      setIsBrushColor(false);
+    }
+  }, [drawingShape]);
+
   useEffect(() => {
     if (!isDrawing || !canvas) return;
 
@@ -117,10 +123,21 @@ const Index1 = () => {
       return;
     }
 
+    if (drawingShape === "Eraser") {
+      canvas.isDrawingMode = true;
+      const eraserBrush = new PencilBrush(canvas);
+      eraserBrush.width = brushWidth;
+      eraserBrush.color = "#ffffff";
+      canvas.freeDrawingBrush = eraserBrush;
+      canvas.defaultCursor =
+        "url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22 fill=%22white%22 stroke=%22black%22 stroke-width=%222%22 /></svg>') 12 12, auto";
+      return;
+    }
+
     let isDragging = false;
 
     const startDrawing = (e) => {
-      if (drawingShape === "Pencil") return;
+      if (drawingShape === "Pencil" || drawingShape === "Eraser") return;
 
       const pointer = canvas.getPointer(e.e);
       rectStartRef.current = { x: pointer.x, y: pointer.y };
@@ -137,17 +154,17 @@ const Index1 = () => {
             selectable: false,
           });
           break;
-
         case "Line":
-          const points = [pointer.x, pointer.y, pointer.x, pointer.y];
-          tempRectRef.current = new Line(points, {
-            stroke: "#000000",
-            strokeWidth: 2,
-            selectable: false,
-            evented: false,
-          });
+          tempRectRef.current = new Line(
+            [pointer.x, pointer.y, pointer.x, pointer.y],
+            {
+              stroke: "#000000",
+              strokeWidth: 2,
+              selectable: false,
+              evented: false,
+            }
+          );
           break;
-
         case "Frame":
           tempRectRef.current = new Rect({
             left: pointer.x,
@@ -163,7 +180,6 @@ const Index1 = () => {
           canvas.defaultCursor = "default";
           canvas.renderAll();
           break;
-
         case "Circle":
           tempRectRef.current = new Circle({
             left: pointer.x,
@@ -173,7 +189,6 @@ const Index1 = () => {
             selectable: false,
           });
           break;
-
         case "Triangle":
           tempRectRef.current = new Triangle({
             left: pointer.x,
@@ -184,7 +199,6 @@ const Index1 = () => {
             selectable: false,
           });
           break;
-
         case "Star":
           const starPoints = [
             { x: 0, y: -50 },
@@ -207,7 +221,6 @@ const Index1 = () => {
             scaleY: 0.2,
           });
           break;
-
         case "Text":
           tempRectRef.current = new IText("Type here...", {
             left: pointer.x,
@@ -241,7 +254,6 @@ const Index1 = () => {
             top: height < 0 ? pointer.y : startY,
           });
           break;
-
         case "Circle":
           const radius = Math.sqrt(width ** 2 + height ** 2) / 2;
           tempRectRef.current.set({
@@ -252,14 +264,12 @@ const Index1 = () => {
             top: height < 0 ? startY + height : startY,
           });
           break;
-
         case "Line":
           tempRectRef.current.set({
             x2: pointer.x,
             y2: pointer.y,
           });
           break;
-
         case "Star":
           const scaleX = Math.abs(width) / 100;
           const scaleY = Math.abs(height) / 100;
@@ -308,23 +318,13 @@ const Index1 = () => {
   };
 
   const handlePencil = () => {
-    if (canvas) {
-      setDrawingShape("Pencil");
-      setIsDrawing(true);
-      canvas.isDrawingMode = true;
-      canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-      canvas.freeDrawingBrush.width = brushWidth;
-      canvas.freeDrawingBrush.color = brushColor;
-      canvas.defaultCursor = "cell";
-    }
+    setDrawingShape("Pencil");
+    setIsDrawing(true);
   };
 
-  const handleClearCanvas = () => {
-    if (canvas) {
-      canvas.clear();
-      canvas.backgroundColor = "white";
-      canvas.renderAll();
-    }
+  const handleEraser = () => {
+    setDrawingShape("Eraser");
+    setIsDrawing(true);
   };
 
   const handleCursor = () => {
@@ -337,16 +337,26 @@ const Index1 = () => {
     }
   };
 
+  const handleClearCanvas = () => {
+    if (canvas) {
+      canvas.clear();
+      canvas.backgroundColor = "white";
+      canvas.renderAll();
+    }
+  };
+
   const handleColorChange = (e) => {
     const newColor = e.target.value;
     setBrushColor(newColor);
 
-    // Update pencil brush color
-    if (canvas?.isDrawingMode && canvas.freeDrawingBrush) {
+    if (
+      canvas?.isDrawingMode &&
+      canvas.freeDrawingBrush &&
+      drawingShape === "Pencil"
+    ) {
       canvas.freeDrawingBrush.color = newColor;
     }
 
-    // Change color of selected object
     if (selectedObject) {
       if (selectedObject.type === "line") {
         selectedObject.set("stroke", newColor);
@@ -363,10 +373,52 @@ const Index1 = () => {
     }
   };
 
+  const handleBrushWidthChange = (e) => {
+    const width = parseInt(e.target.value);
+    setBrushWidth(width);
+
+    if (canvas?.isDrawingMode && canvas.freeDrawingBrush) {
+      canvas.freeDrawingBrush.width = width;
+    }
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
       <div className="border-black w-[1000px] h-[600px] flex items-center justify-center bg-white">
         <canvas id="canvas" ref={canvasRef}></canvas>
+      </div>
+
+      <div className="mt-4 w-[1000px] flex justify-center">
+        <div className="flex items-center gap-6 bg-white shadow-md border border-gray-300 rounded-xl px-6 py-3">
+          {/* {isBrushColor && (
+            <>
+              <label className="font-semibold text-gray-700">Color:</label>
+              <input
+                type="color"
+                value={brushColor}
+                onChange={handleColorChange}
+                className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+              />
+            </>
+          )} */}
+
+          {isBrush && (
+            <>
+              <label className="font-semibold text-gray-700">Width:</label>
+              <input
+                type="range"
+                min="1"
+                max="50"
+                value={brushWidth}
+                onChange={handleBrushWidthChange}
+                className="w-40 accent-amber-500"
+              />
+              <span className="font-medium text-sm text-gray-600">
+                {brushWidth}px
+              </span>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="mt-4">
@@ -383,8 +435,14 @@ const Index1 = () => {
           handlePencil={handlePencil}
           handleCursor={handleCursor}
           clearCanvas={handleClearCanvas}
+          handleEraser={handleEraser}
+          handleBrushWidthChange={handleBrushWidthChange}
         />
       </div>
+
+      {/* <button className="bg-amber-500 fixed right-0" onClick={handleEraser}>
+        Erase
+      </button> */}
     </div>
   );
 };
