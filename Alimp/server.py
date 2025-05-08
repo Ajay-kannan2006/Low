@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests
 
 GOOGLE_API_KEY =os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=GOOGLE_API_KEY)
+genai.configure(api_key="AIzaSyAtzayC90UMhnnROSxOQA1w9nWxZtK37Sk")
 
 def convert_html_css_to_react(html_code, css_code):
     prompt = f"""Convert the following HTML and CSS into a React functional component using Tailwind CSS.

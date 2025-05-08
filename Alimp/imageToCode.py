@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests
 
 # Configure Gemini API
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))  # 🔁 Replace with your Gemini API key
+genai.configure(api_key="AIzaSyAtzayC90UMhnnROSxOQA1w9nWxZtK37Sk")  # 🔁 Replace with your Gemini API key
 
 # Function to generate code from image using Gemini
 def generate_code_from_image(image_base64):
