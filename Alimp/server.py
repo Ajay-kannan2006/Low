@@ -26,7 +26,7 @@ def convert_html_css_to_react(html_code, css_code):
     """
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-pro")  
+        model = genai.GenerativeModel("gemini-1.5-flash")  
         response = model.generate_content(prompt)
         return response.text 
     except Exception as e:
