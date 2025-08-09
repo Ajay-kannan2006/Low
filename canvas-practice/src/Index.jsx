@@ -36,6 +36,7 @@ const Index = () => {
 
         {/* main with navbar*/}
         {/* <Route path='/canvas' element={<App />} /> */}
+        {/* Hello */}
         <Route
           path="/home"
           element={
